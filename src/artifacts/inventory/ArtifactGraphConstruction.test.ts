@@ -410,3 +410,22 @@ it("preserves path-selected inventory roles for XML content", () => {
     format: "file",
   });
 });
+
+it("names ZIP-backed JVM archive members as their own families", () => {
+  const zip = Buffer.from([0x50, 0x4b, 0x03, 0x04]);
+  expect(
+    classifyArtifactBytesAtPath("WEB-INF/lib/spring-core-4.1.6.jar", zip),
+  ).toEqual({ kind: "container", format: "jar" });
+  expect(classifyArtifactBytesAtPath("embedded/app.war", zip)).toEqual({
+    kind: "container",
+    format: "war",
+  });
+  expect(classifyArtifactBytesAtPath("packaged/app.ear", zip)).toEqual({
+    kind: "container",
+    format: "ear",
+  });
+  expect(classifyArtifactBytesAtPath("unnamed.archive", zip)).toEqual({
+    kind: "container",
+    format: "zip",
+  });
+});

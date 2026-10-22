@@ -3,6 +3,9 @@ export const ZIP_PACKAGE_FORMATS = [
   "zip",
   "ipa",
   "apk",
+  "jar",
+  "war",
+  "ear",
   "msix",
   "appx",
   "hap",
@@ -109,6 +112,8 @@ export const locateTrailingZipArchive = async (
  * HarmonyOS App Pack suffix `.app` is also absent here: it applies only to
  * root inputs (see `classifyAndHashRoot`), because a nested ZIP entry ending
  * in `.app` inside another package, such as an IPA, is not an App Pack.
+ * JVM archive suffixes `.jar`, `.war` and `.ear` name their own ZIP families;
+ * their bytes remain verified ZIP archives served by the shared reader.
  */
 export const zipPackageFormatForPath = (
   path: string,
@@ -118,6 +123,9 @@ export const zipPackageFormatForPath = (
   if (lower.endsWith(".ipa")) return "ipa";
   // An Android App Bundle is a ZIP archive, not a standalone APK.
   if (lower.endsWith(".apk")) return "apk";
+  if (lower.endsWith(".jar")) return "jar";
+  if (lower.endsWith(".war")) return "war";
+  if (lower.endsWith(".ear")) return "ear";
   if (lower.endsWith(".msix") || lower.endsWith(".msixbundle")) return "msix";
   if (lower.endsWith(".appx") || lower.endsWith(".appxbundle")) return "appx";
   if (lower.endsWith(".hap")) return "hap";
